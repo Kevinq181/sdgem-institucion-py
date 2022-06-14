@@ -6,13 +6,11 @@ from bson.objectid import ObjectId
 
 application = Flask(__name__)
 
-app = application
+application.config['MONGO_URI'] = 'mongodb+srv://kjquito:kjquito18@cluster0.4tfnq.mongodb.net/Cluster0?retryWrites=true&w=majority'
 
-app.config['MONGO_URI'] = 'mongodb+srv://kjquito:kjquito18@cluster0.4tfnq.mongodb.net/Cluster0?retryWrites=true&w=majority'
+mongo = PyMongo(application)
 
-mongo = PyMongo(app)
-
-@app.route('/instituciones', methods=['POST'])
+@application.route('/instituciones', methods=['POST'])
 def create_instituciones():
     # Receiving Data
     nombre_institucion = request.json['nombre_institucion']
@@ -41,22 +39,22 @@ def create_instituciones():
         return not_found()
 
 
-@app.route('/instituciones', methods=['GET'])
+@application.route('/instituciones', methods=['GET'])
 def get_instituciones():
     institucion = mongo.db.instituciones.find()
     response = json_util.dumps(institucion)
-    return Response(response, mimetype="application/json")
+    return Response(response, mimetype="applicationlication/json")
 
 
-@app.route('/instituciones/<id>', methods=['GET'])
+@application.route('/instituciones/<id>', methods=['GET'])
 def get_institucion(id):
     print(id)
     institucion = mongo.db.instituciones.find_one({'_id': ObjectId(id), })
     response = json_util.dumps(institucion)
-    return Response(response, mimetype="application/json")
+    return Response(response, mimetype="applicationlication/json")
 
 
-@app.route('/instituciones/<id>', methods=['DELETE'])
+@application.route('/instituciones/<id>', methods=['DELETE'])
 def delete_institucion(id):
     mongo.db.instituciones.delete_one({'_id': ObjectId(id)})
     response = jsonify({'message': 'User' + id + ' Deleted Successfully'})
@@ -64,7 +62,7 @@ def delete_institucion(id):
     return response
 
 
-@app.route('/instituciones/<_id>', methods=['PUT'])
+@application.route('/instituciones/<_id>', methods=['PUT'])
 def update_institucion(_id):
     nombre_institucion = request.json['nombre_institucion']
     rif = request.json['rif']
@@ -83,7 +81,7 @@ def update_institucion(_id):
       return not_found()
 
 
-@app.errorhandler(404)
+@application.errorhandler(404)
 def not_found(error=None):
     message = {
         'message': 'Resource Not Found ' + request.url,
@@ -95,4 +93,4 @@ def not_found(error=None):
 
 
 if __name__ == "__main__":
-    app.run()
+    application.run()
