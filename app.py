@@ -4,9 +4,9 @@ from bson import json_util
 from bson.objectid import ObjectId
 
 
-app = Flask(__name__)
+application = Flask(__name__)
 
-app.secret_key = 'myawesomesecretkey'
+app = application
 
 app.config['MONGO_URI'] = 'mongodb+srv://kjquito:kjquito18@cluster0.4tfnq.mongodb.net/Cluster0?retryWrites=true&w=majority'
 
@@ -94,5 +94,5 @@ def not_found(error=None):
     return response
 
 
-#if __name__ == "__main__":
-    #app.run(debug=True, port=3000)
+if __name__ == "__main__":
+    app.run()
